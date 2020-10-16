@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "36205867460",
+    "firebase_url": "https://paymax-92572.firebaseio.com",
+    "project_id": "paymax-92572",
+    "storage_bucket": "paymax-92572.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36205867460:android:a3ba1e583f3cd0d90ff491",
+        "android_client_info": {
+          "package_name": "com.scienceboss.paymax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36205867460-6sd9dl3iq0svio1lvmhrupqdujoplfca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scienceboss.paymax",
+            "certificate_hash": "8bccce58bad61bc3d9158a5612b7c29c9a0a37f9"
+          }
+        },
+        {
+          "client_id": "36205867460-hnneam4h8sph0bqfs5uvtgbioldq9pl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgv7XEVkCTEg0LwP74UsXDiWp-ePHJpiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36205867460-hnneam4h8sph0bqfs5uvtgbioldq9pl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

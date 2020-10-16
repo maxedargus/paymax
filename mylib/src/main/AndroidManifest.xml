@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.scienceboss.mylib" />
+    package="com.scienceboss.mylib" >
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
