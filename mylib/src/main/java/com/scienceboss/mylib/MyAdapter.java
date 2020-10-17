@@ -1,4 +1,4 @@
-package com.scienceboss.paymax;
+package com.scienceboss.mylib;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 

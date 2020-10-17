@@ -1,9 +1,10 @@
-package com.scienceboss.paymax;
+package com.scienceboss.mylib;
 
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
@@ -27,16 +29,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.scienceboss.mylib.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
-public class libraryclass {
+public class LibraryContent {
+
+
 
 
 
@@ -65,14 +73,14 @@ public class libraryclass {
         if(pref.getString("timecheck","firsttime").equals("firsttime")){
             editor.putString("timecheck","secondtime");editor.apply();
 
-        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            //return statement not added properly
-        }
-        String imex = manager.getDeviceId();
+            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                //return statement not added properly
+            }
+            String imex = manager.getDeviceId();
 
-        editor.putString("3886PayStackOverflowImei",imex);
-        editor.apply(); }
+            editor.putString("3886PayStackOverflowImei",imex);
+            editor.apply(); }
 
 
     }
@@ -140,7 +148,7 @@ public class libraryclass {
             public void onCancelled(DatabaseError databaseError) {
             }
         }; myRef.addListenerForSingleValueEvent(eventListener);
-     ///////////////
+        ///////////////
 
 
 
@@ -228,7 +236,7 @@ public class libraryclass {
                 myRefTODAY.child("TRANSACTIONS").setValue("");
 
                 myRefTHISMONTH.child("TRANSACTIONS").setValue("");
-          //      Toast.makeText(context,"successful",Toast.LENGTH_LONG).show();
+                //      Toast.makeText(context,"successful",Toast.LENGTH_LONG).show();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -328,7 +336,7 @@ public class libraryclass {
 
 
 
-      //  receive.setEnabled(false);
+        //  receive.setEnabled(false);
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = pref.edit();
 
@@ -342,11 +350,11 @@ public class libraryclass {
             @Override
             public void onFinish() {
 
-            //    receive.setEnabled(false);
+                //    receive.setEnabled(false);
                 receive.setAlpha(0.5f);
 
                 if(pref.getString("lookup","").isEmpty() || (pref.getString("lookup","") == "")){
-                //    receive.setEnabled(false);
+                    //    receive.setEnabled(false);
                     receive.setAlpha(0.5f);
                     refresher.start();
                 }
@@ -427,10 +435,10 @@ public class libraryclass {
         setmessage(context, "you have received a total of "  + amount +  " coins\n\nclick ok to see receipt");
         editor.putString("lookup","");editor.apply();
         reset(context);
-      //  receive.setEnabled(false);
+        //  receive.setEnabled(false);
         refresher.cancel();
 
-return amount;
+        return amount;
     }
 
 
@@ -559,6 +567,8 @@ return amount;
             }
         }; myRef.addListenerForSingleValueEvent(eventListener);
     }
+
+
 
 
 
