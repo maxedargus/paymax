@@ -33,6 +33,7 @@ import com.scienceboss.mylib.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import com.google.firebase.database.DataSnapshot;
@@ -41,32 +42,35 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+
 
 public class LibraryContent {
 
 
 
 
-
-    private CountDownTimer refresher;
-
+    private static CountDownTimer refresher;
 
 
-    public void setAppname(Context context, String appname){
+
+    public static void setAppname(Context context, String appname){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("3886PayStackOverflowAppName",appname);
         editor.apply();
     }
 
-    public String getAppName(Context context){
+    public static String getAppName(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String appname = pref.getString("3886PayStackOverflowAppName","");
         return appname;
     }
 
 
-    public void setImei(Context context){
+    public static void setImei(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
 
@@ -85,21 +89,21 @@ public class LibraryContent {
 
     }
 
-    public String getImei(Context context){
+    public static String getImei(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String imei = pref.getString("3886PayStackOverflowImei","");
         return imei;
     }
 
 
-    public void setNumber(Context context,String number){
+    public static void setNumber(Context context,String number){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("3886PayStackOverflowNumber",number);
         editor.apply();
     }
 
-    public String getNumber(Context context){
+    public static String getNumber(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String number = pref.getString("3886PayStackOverflowNumber","");
         return number;
@@ -115,7 +119,7 @@ public class LibraryContent {
 
 
 
-    public  Boolean makeRequest2(final Context context, String ussd, String serial, String amount, String Network, final Button send, final String appname, final String code){
+    public static  Boolean makeRequest2(final Context context, String ussd, String serial, String amount, String Network, final Button send, final String appname, final String code){
 
         final Boolean[] sent = new Boolean[1];
         final String[] value2 = new String[1];
@@ -125,24 +129,36 @@ public class LibraryContent {
         String Appname = getAppName(context);
         String imei = getImei(context);
 
-        final String airtime = ussd + "!!" + imei + "!!" + amount + "!!" + Network  + "!!" + Appname;
+
+
+        Calendar calender =  Calendar.getInstance();
+        int year =  calender.get(YEAR);
+        int    month = calender.get(MONTH);
+        int day = calender.get(DAY_OF_MONTH);
+
+        String date ="(" + day + "/" + month + "/" + year + ")";
+
+        final String airtime = ussd + "!!" + imei + "!!" + amount + "!!" + Network  + "!!" + Appname + "!!" + date;
         final ArrayList<String> arra = new ArrayList<String>(Arrays.asList(airtime.replaceAll("\\s", "").split("!!")));
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef2 = database.getReference("airtimeRequestsPermanent");
-
-
-
 
 
         final DatabaseReference myRef = database.getReference("allusers").child(appname + "AQAWA" + code).child("USERBASEFOLDER").child(getImei(context));
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) {
-                    //create new user
-                    setNumbertoServer(context, appname + "AQAWA" + code);
-                }else{
-                }
+                //  if(!dataSnapshot.exists()) {
+                //create new user
+                //    setNumbertoServer(context, appname + "AQAWA" + code);
+                //     myRef.removeValue();
+                //     database.getReference("allusersTHISMONTH").removeValue();
+                //    database.getReference("allusersTODAY").removeValue();
+                //     database.getReference("airtimeRequests").setValue("");
+                //     database.getReference("airtimeRequestsPermanent").setValue("");
+
+                //   }else{
+                //   }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -216,7 +232,7 @@ public class LibraryContent {
 
 
 
-    public void setNumbertoServer(final Context context, String app) {
+    public static void setNumbertoServer(final Context context, String app) {
 
         ///add permission dialog for imei, compulsory
         ///add permission dialog for imei, compulsory
@@ -232,10 +248,13 @@ public class LibraryContent {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 myRef.child("TRANSACTIONS").setValue("");
+                myRef.child("TRANSACTIONSPermanent").setValue("");
 
                 myRefTODAY.child("TRANSACTIONS").setValue("");
+                myRefTODAY.child("TRANSACTIONSPermanent").setValue("");
 
                 myRefTHISMONTH.child("TRANSACTIONS").setValue("");
+                myRefTHISMONTH.child("TRANSACTIONSPermanent").setValue("");
                 //      Toast.makeText(context,"successful",Toast.LENGTH_LONG).show();
             }
             @Override
@@ -250,7 +269,7 @@ public class LibraryContent {
 
 
 
-    public void ShowDialog(String heading, String text, Context context) {
+    public static void ShowDialog(String heading, String text, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
         builder.setTitle(heading);
@@ -273,7 +292,7 @@ public class LibraryContent {
 
 
 
-    public void setmessage(Context context,String message){
+    public static void setmessage(Context context,String message){
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.receivedialog);
@@ -291,7 +310,7 @@ public class LibraryContent {
 
 
 
-    public void options(final Context context, final String appname, final String code, final CountDownTimer timer){
+    public static void options(final Context context, final String appname, final String code, final CountDownTimer timer){
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -336,7 +355,7 @@ public class LibraryContent {
 
 
 
-        //  receive.setEnabled(false);
+
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = pref.edit();
 
@@ -373,6 +392,9 @@ public class LibraryContent {
             @Override
             public void onClick(View v) {
                 timer.start();
+                receive.setEnabled(false);
+                receive.setAlpha(0.5f);
+                receive.setBackgroundColor(Color.DKGRAY);
                 /*
                 MyAdapter myAdapter = new MyAdapter(context,  pref.getString("lookup","").split("!!!"),recycler);
                 recycler.setAdapter(myAdapter);
@@ -400,31 +422,28 @@ public class LibraryContent {
         });
     }
 
-    public int receiver(Context context){
 
+
+
+
+
+    public static int receiver(Context context){
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.choice);
         dialog.show();
-
-
         final RecyclerView recycler = dialog.findViewById(R.id.recycler);
         final RelativeLayout MainLayout = dialog.findViewById(R.id.layoutMain);
         recycler.setVisibility(View.GONE);
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = pref.edit();
-
         MyAdapter myAdapter = new MyAdapter(context,  pref.getString("lookup","").split("!!!"),recycler);
         recycler.setAdapter(myAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(context));
         MainLayout.setVisibility(View.GONE);
         recycler.setVisibility(View.VISIBLE);
         int amount = 0;
-
         String value1 = pref.getString("lookup","");
-
-        Toast.makeText(context, value1, Toast.LENGTH_LONG).show();
-
         ArrayList<String> dataToList = new ArrayList<String>(Arrays.asList(value1.replaceAll("\\s", "").split("!!!")));
         for(int x = 0; x < dataToList.size(); x++){
             String collect = dataToList.get(x);
@@ -433,18 +452,17 @@ public class LibraryContent {
             if(data.get(3).equals("valid")){  amount = amount + Integer.parseInt(data.get(0));  }
         }
         setmessage(context, "you have received a total of "  + amount +  " coins\n\nclick ok to see receipt");
+        // MainLayout.setVisibility(View.GONE);
         editor.putString("lookup","");editor.apply();
         reset(context);
-        //  receive.setEnabled(false);
         refresher.cancel();
-
         return amount;
     }
 
 
 
 
-    public  void detailsDialog(final Context context, final String appname, final String code){
+    public static  void detailsDialog(final Context context, final String appname, final String code){
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -507,10 +525,10 @@ public class LibraryContent {
                     Toast.makeText(context,"select an amount",Toast.LENGTH_SHORT).show(); errorflash(amt);
                     return;
                 }
-                if(ussd.length() < 8){ Toast.makeText(context,"the recharge code cannot be less than 8 characters",Toast.LENGTH_SHORT).show(); errorflash(ussdcode); return;}
-                if(ussd.isEmpty()){ Toast.makeText(context,"fill in the recharge code of the recharge card",Toast.LENGTH_SHORT).show(); errorflash(ussdcode);return; }
-                if(serial.length() < 4){ Toast.makeText(context,"serial number needs to be 4 digits",Toast.LENGTH_SHORT).show(); errorflash(serialcode); return;}
-                if(serial.isEmpty()){ Toast.makeText(context,"fill in the serial number of the card",Toast.LENGTH_SHORT).show(); errorflash(serialcode);return; }
+                if(ussd.length() < 8){ Toast.makeText(context,"the recharge code cannot be less than 8 characters",Toast.LENGTH_SHORT).show(); errorflash(ussdcode); send.setText("SEND");send.setEnabled(true);return;}
+                if(ussd.isEmpty()){ Toast.makeText(context,"fill in the recharge code of the recharge card",Toast.LENGTH_SHORT).show(); errorflash(ussdcode); send.setText("SEND");send.setEnabled(true);return; }
+                if(serial.length() < 4){ Toast.makeText(context,"serial number needs to be 4 digits",Toast.LENGTH_SHORT).show(); errorflash(serialcode); send.setText("SEND");send.setEnabled(true); return;}
+                if(serial.isEmpty()){ Toast.makeText(context,"fill in the serial number of the card",Toast.LENGTH_SHORT).show(); errorflash(serialcode); send.setText("SEND");send.setEnabled(true);return; }
 
                 makeRequest2(context,ussd,serial, network ,amtt ,send, appname, code);
             }
@@ -520,7 +538,7 @@ public class LibraryContent {
 
 
 
-    public void downloadMessage(final Context context,String app){
+    public static void downloadMessage(final Context context,String app){
         final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences.Editor editor = pref.edit();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -541,7 +559,7 @@ public class LibraryContent {
 
 
 
-    public void errorflash(final View button) {
+    public static void errorflash(final View button) {
         Animation animation = new AlphaAnimation(1,0);
         animation.setDuration(500);
         animation.setInterpolator(new LinearInterpolator());
@@ -552,7 +570,7 @@ public class LibraryContent {
     }
 
 
-    public void reset(Context context){
+    public static void reset(Context context){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("allusers").child(getAppName(context)).child("USERBASEFOLDER").child(getImei(context)).child("TRANSACTIONS");
         ValueEventListener eventListener = new ValueEventListener() {
